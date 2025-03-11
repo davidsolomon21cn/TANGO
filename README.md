@@ -14,7 +14,8 @@
 Welcome contributors! Feel free to submit the pull requests!
 
 - **[2024/10]** Welcome to try our [TANGO](<(https://huggingface.co/spaces/H-Liu1997/TANGO)!>) on Hugging face space !
-- **[2024/10]** Code for create gesture graph is available.
+- **[2024/10]** Code for creating gesture graph is available.
+- **[2024/10]** Video data download [Google Drive](https://drive.google.com/drive/folders/1-A_Bb_L7UMLvckbHmZRltnb7jgaLzd6D?usp=sharing) (show-oliver and harward business)
 
 <p align=center>
 <img src ="./assets/hg.png" width="60%" >
