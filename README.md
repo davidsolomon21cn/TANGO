@@ -72,11 +72,14 @@ We Recommend a python version `==3.9.20` and cuda version `==11.8`. Then build e
 
 ```shell
 # [Optional] Create a virtual env
-conda create -n tango python==3.9.20
-conda activate tango
+conda create -n tango_py39 python==3.9.20
+conda activate tango_py39
+
+conda create -n tango_py310 python==3.10.16
+conda activate tango_py310
 # Install with pip:
-pip install -r ./pre-requirements.txt
-pip install -r ./requirements.txt
+python -m pip install -r ./pre-requirements.txt
+python -m pip install -r ./requirements.txt
 ```
 
 # 🚀 Training and Inference
@@ -85,7 +88,7 @@ pip install -r ./requirements.txt
 
 Here is the command for running inference scripts under the path `<your root>/TANGO/`, it will take around 3 min to generate two 8s vidoes. You can visualize by directly check the video or check the result .npz files via blender using our blender addon in [EMAGE](https://github.com/PantoMatrix/PantoMatrix).
 
-_Necessary checkpoints and pre-computed graphs will be automatically downloaded during the first run. Please ensure that at least 35GB of disk space is available._
+_Necessary checkpoints and pre-computed graphs will be automatically downloaded during the first run. Please ensure that at least 7GB of disk space is available._
 
 ```shell
 python app.py

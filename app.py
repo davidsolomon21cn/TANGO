@@ -674,17 +674,17 @@ def make_demo():
 
         # Create a gallery with 5 videos
         with gr.Row():
-            gr.Video(value="./datasets/cached_audio/demo1.mp4", label="Demo 0", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo2.mp4", label="Demo 1", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo3.mp4", label="Demo 2", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo4.mp4", label="Demo 3", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo5.mp4", label="Demo 4", watermark="./datasets/watermark.png")
+            gr.Video(value="./datasets/cached_audio/demo1.mp4", label="Demo 0")
+            gr.Video(value="./datasets/cached_audio/demo2.mp4", label="Demo 1")
+            gr.Video(value="./datasets/cached_audio/demo3.mp4", label="Demo 2")
+            gr.Video(value="./datasets/cached_audio/demo4.mp4", label="Demo 3")
+            gr.Video(value="./datasets/cached_audio/demo5.mp4", label="Demo 4")
         with gr.Row():
-            gr.Video(value="./datasets/cached_audio/demo6.mp4", label="Demo 5", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo0.mp4", label="Demo 6", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo7.mp4", label="Demo 7", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo8.mp4", label="Demo 8", watermark="./datasets/watermark.png")
-            gr.Video(value="./datasets/cached_audio/demo9.mp4", label="Demo 9", watermark="./datasets/watermark.png")
+            gr.Video(value="./datasets/cached_audio/demo6.mp4", label="Demo 5")
+            gr.Video(value="./datasets/cached_audio/demo0.mp4", label="Demo 6")
+            gr.Video(value="./datasets/cached_audio/demo7.mp4", label="Demo 7")
+            gr.Video(value="./datasets/cached_audio/demo8.mp4", label="Demo 8")
+            gr.Video(value="./datasets/cached_audio/demo9.mp4", label="Demo 9")
 
         with gr.Row():
             gr.Markdown(
@@ -707,7 +707,6 @@ def make_demo():
                     autoplay=False,
                     loop=False,
                     show_share_button=True,
-                    watermark="./datasets/watermark.png",
                 )
             with gr.Column(scale=4):
                 video_output_2 = gr.Video(
@@ -716,7 +715,6 @@ def make_demo():
                     autoplay=False,
                     loop=False,
                     show_share_button=True,
-                    watermark="./datasets/watermark.png",
                 )
             with gr.Column(scale=1):
                 file_output_1 = gr.File(label="Download 3D Motion and Visualize in Blender")

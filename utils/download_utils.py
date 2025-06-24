@@ -1,5 +1,5 @@
 import os
-from huggingface_hub import snapshot_download
+from huggingface_hub import snapshot_download, hf_hub_download
 
 
 def download_files_from_repo():
@@ -17,11 +17,21 @@ def download_files_from_repo():
         snapshot_download(
             repo_id=repo_id, local_dir=local_dir, repo_type="space", allow_patterns="Wav2Lip/checkpoints/*.pth", force_download=True
         )
-        snapshot_download(
-            repo_id=repo_id, local_dir=local_dir, repo_type="space", allow_patterns="datasets/cached_ckpts/*", force_download=True
+        hf_hub_download(
+            repo_id="H-Liu1997/cached_ckpts",
+            filename="ckpt.pth",
+            repo_type="dataset",
+            local_dir=os.path.join(local_dir, "datasets/cached_ckpts"),
+            force_download=True,
+            local_dir_use_symlinks=False,
         )
-        snapshot_download(
-            repo_id=repo_id, local_dir=local_dir, repo_type="space", allow_patterns="datasets/cached_graph/*", force_download=True
+        hf_hub_download(
+            repo_id="H-Liu1997/cached_graph",
+            filename="youtube_test/speaker1.pkl",
+            repo_type="dataset",
+            local_dir=os.path.join(local_dir, "datasets/cached_graph"),
+            force_download=True,
+            local_dir_use_symlinks=False,
         )
         snapshot_download(
             repo_id=repo_id, local_dir=local_dir, repo_type="space", allow_patterns="emage/smplx_models/smplx/*", force_download=True
