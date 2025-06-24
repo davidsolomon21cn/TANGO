@@ -49,9 +49,8 @@ Welcome contributors! Feel free to submit the pull requests!
 
 # 📝 Release Plans
 
-- [ ] Training codes for AuMoClip and ACInterp
-- [ ] Inference codes for ACInterp
-- [ ] Processed Youtube Buiness Video data (very small, around 15 mins)
+- [x] Training codes for AuMoClip
+- [x] Processed Youtube Buiness Video data (very small, around 15 mins)
 - [x] Scripts for creating gesture graph
 - [x] Inference codes with AuMoClip and pretrained weights
 
@@ -62,19 +61,14 @@ Welcome contributors! Feel free to submit the pull requests!
 ```shell
 git clone https://github.com/CyberAgentAILab/TANGO.git
 cd TANGO
-git clone https://github.com/justinjohn0306/Wav2Lip.git
-git clone https://github.com/dajes/frame-interpolation-pytorch.git
 ```
 
 ## Build Environtment
 
-We Recommend a python version `==3.9.20` and cuda version `==11.8`. Then build environment as follows:
+For inference and training CLIP part, we recommend a python version `==3.10.16` and cuda version `==11.8`. Now HuggingFace Space version is py310 version:
 
 ```shell
 # [Optional] Create a virtual env
-conda create -n tango_py39 python==3.9.20
-conda activate tango_py39
-
 conda create -n tango_py310 python==3.10.16
 conda activate tango_py310
 # Install with pip:
@@ -88,15 +82,39 @@ python -m pip install -r ./requirements.txt
 
 Here is the command for running inference scripts under the path `<your root>/TANGO/`, it will take around 3 min to generate two 8s vidoes. You can visualize by directly check the video or check the result .npz files via blender using our blender addon in [EMAGE](https://github.com/PantoMatrix/PantoMatrix).
 
-_Necessary checkpoints and pre-computed graphs will be automatically downloaded during the first run. Please ensure that at least 7GB of disk space is available._
+_Necessary checkpoints and pre-computed graphs will be automatically downloaded during the first run. Please ensure that at least 10GB of disk space is available._
 
 ```shell
+# inference 
+python inference.py --audio_path ./datasets/cached_audio/example_male_voice_9_seconds.wav --character_name ./datasets/cached_audio/speaker9_o7Ik1OB4TaE_00-00-38.15_00-00-42.33.mp4
+
+# start gradio app like hugging face space
 python app.py
+```
+
+## Training JointEmbedding (CLIP)
+
+```shell
+# download the training data from https://drive.google.com/file/d/11ZQI8mB7mP8OtlIdcjtxKvg7OxVZ4t7d/view?usp=drive_link
+
+torchrun --nproc_per_node=1 train_high_env0.py --config ./configs/baseline_high_env0.yaml
 ```
 
 ### Create the graph for custom character
 
+For building a motion graph, we recommend a python version `==3.9.20` and cuda version `==11.8` to support `mmcv` and `mmpose`. 
+
 ```shell
+# [Optional] Create a virtual env
+conda create -n tango_py39 python==3.9.20
+conda activate tango_py39
+# Install with pip:
+python -m pip install -r ./pre-requirements_py39.txt
+python -m pip install -r ./requirements_py39.txt
+```
+
+```shell
+# set up the py39
 python create_graph.py
 ```
 

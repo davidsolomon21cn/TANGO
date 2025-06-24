@@ -16,7 +16,6 @@ class L1div(object):
     def __init__(self):
         self.counter = 0
         self.sum = 0
-
     def run(self, results):
         self.counter += results.shape[0]
         mean = np.mean(results, 0)
@@ -24,14 +23,12 @@ class L1div(object):
             results[i, :] = abs(results[i, :] - mean)
         sum_l1 = np.sum(results)
         self.sum += sum_l1
-
     def avg(self):
-        return self.sum / self.counter
-
+        return self.sum/self.counter
     def reset(self):
         self.counter = 0
         self.sum = 0
-
+        
 
 class SRGR(object):
     def __init__(self, threshold=0.1, joints=47, joint_dim=3):
@@ -40,7 +37,7 @@ class SRGR(object):
         self.joint_dim = joint_dim
         self.counter = 0
         self.sum = 0
-
+        
     def run(self, results, targets, semantic=None, verbose=False):
         if semantic is None:
             semantic = np.ones(results.shape[0])
@@ -51,27 +48,26 @@ class SRGR(object):
         results = results.reshape(-1, self.pose_dimes, self.joint_dim)
         targets = targets.reshape(-1, self.pose_dimes, self.joint_dim)
         semantic = semantic.reshape(-1)
-        diff = np.linalg.norm(results - targets, axis=2)  # T, J
-        if verbose:
-            print(diff)
-        success = np.where(diff < self.threshold, 1.0, 0.0)
+        diff = np.linalg.norm(results-targets, axis=2) # T, J
+        if verbose: print(diff)
+        success = np.where(diff<self.threshold, 1.0, 0.0)
         for i in range(success.shape[0]):
-            success[i, :] *= semantic[i] * (1 / avg_weight)
-        rate = np.sum(success) / (success.shape[0] * success.shape[1])
+            success[i, :] *= semantic[i] * (1/avg_weight) 
+        rate = np.sum(success)/(success.shape[0]*success.shape[1])
         self.counter += success.shape[0]
-        self.sum += rate * success.shape[0]
+        self.sum += (rate*success.shape[0])
         return rate
-
+    
     def avg(self):
-        return self.sum / self.counter
-
+        return self.sum/self.counter
+    
     def reset(self):
         self.counter = 0
         self.sum = 0
 
 
 class BC(object):
-    def __init__(self, download_path=None, sigma=0.3, order=7, upper_body=[3, 6, 9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]):
+    def __init__(self, download_path=None, sigma=0.3, order=7, upper_body=[3,6,9,12,13,14,15,16,17,18,19,20,21]):
         self.sigma = sigma
         self.order = order
         self.upper_body = upper_body
@@ -81,10 +77,7 @@ class BC(object):
             model_file_path = os.path.join(download_path, "mean_vel_smplxflame_30.npy")
             if not os.path.exists(model_file_path):
                 print(f"Downloading {model_file_path}")
-                wget.download(
-                    "https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/mean_vel_smplxflame_30.npy",
-                    model_file_path,
-                )
+                wget.download("https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/mean_vel_smplxflame_30.npy", model_file_path)
         self.mmae = np.load(os.path.join(download_path, "mean_vel_smplxflame_30.npy")) if download_path is not None else None
         self.threshold = 0.10
         self.counter = 0
@@ -96,9 +89,9 @@ class BC(object):
             y = wave
         else:
             y, sr = librosa.load(wave, sr=sr_audio)
-
+        
         short_y = y[t_start:t_end] if t_start is not None else y
-        onset_t = librosa.onset.onset_detect(y=short_y, sr=sr_audio, hop_length=hop_length, units="time")
+        onset_t = librosa.onset.onset_detect(y=short_y, sr=sr_audio, hop_length=hop_length, units='time')
         return onset_t
 
     def load_pose(self, pose, t_start, t_end, pose_fps, without_file=False):
@@ -115,10 +108,10 @@ class BC(object):
                     if pose_fps == 15 and i % 2 == 0:
                         continue
                     data_each_file.append(np.concatenate([line_data_np[30:39], line_data_np[112:121]], 0))
-
-        data_each_file = np.array(data_each_file)  # T*165
+                    
+        data_each_file = np.array(data_each_file)# T*165
         # print(data_each_file.shape)
-
+        
         joints = data_each_file.transpose(1, 0)
         dt = 1 / pose_fps
         init_vel = (joints[:, 1:2] - joints[:, :1]) / dt
@@ -152,7 +145,7 @@ class BC(object):
         onset_raw = self.load_audio(wave, t_start, t_end)
         dur = t_end - t_start
         for i in range(num_random):
-            beat_vel_all = self.load_pose(pose, i, i + dur, pose_fps)
+            beat_vel_all = self.load_pose(pose, i, i+dur, pose_fps)
             dis_all_b2a = self.calculate_align(onset_raw, beat_vel_all)
             print(f"{i}s: ", dis_all_b2a)
 
@@ -163,14 +156,14 @@ class BC(object):
         librosa.display.waveshow(audio, sr=sr, alpha=0.7, ax=axarr[1])
 
         for onset in onset_times_1:
-            axarr[0].axvline(onset, color="r", linestyle="--", alpha=0.9, label="Onset Method 1")
+            axarr[0].axvline(onset, color='r', linestyle='--', alpha=0.9, label='Onset Method 1')
         axarr[0].legend()
-        axarr[0].set(title="Onset Method 1", xlabel="", ylabel="Amplitude")
+        axarr[0].set(title='Onset Method 1', xlabel='', ylabel='Amplitude')
 
         for onset in onset_times_2:
-            axarr[1].axvline(onset, color="b", linestyle="-", alpha=0.7, label="Onset Method 2")
+            axarr[1].axvline(onset, color='b', linestyle='-', alpha=0.7, label='Onset Method 2')
         axarr[1].legend()
-        axarr[1].set(title="Onset Method 2", xlabel="Time (s)", ylabel="Amplitude")
+        axarr[1].set(title='Onset Method 2', xlabel='Time (s)', ylabel='Amplitude')
 
         handles, labels = plt.gca().get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
@@ -180,13 +173,13 @@ class BC(object):
 
     def audio_beat_vis(self, onset_raw, onset_bt, onset_bt_rms):
         fig, ax = plt.subplots(nrows=4, sharex=True)
-        librosa.display.specshow(librosa.amplitude_to_db(self.S, ref=np.max), y_axis="log", x_axis="time", ax=ax[0])
-        ax[1].plot(self.times, self.oenv, label="Onset strength")
-        ax[1].vlines(librosa.frames_to_time(onset_raw), 0, self.oenv.max(), label="Raw onsets", color="r")
+        librosa.display.specshow(librosa.amplitude_to_db(self.S, ref=np.max), y_axis='log', x_axis='time', ax=ax[0])
+        ax[1].plot(self.times, self.oenv, label='Onset strength')
+        ax[1].vlines(librosa.frames_to_time(onset_raw), 0, self.oenv.max(), label='Raw onsets', color='r')
         ax[1].legend()
-        ax[2].vlines(librosa.frames_to_time(onset_bt), 0, self.oenv.max(), label="Backtracked", color="r")
+        ax[2].vlines(librosa.frames_to_time(onset_bt), 0, self.oenv.max(), label='Backtracked', color='r')
         ax[2].legend()
-        ax[3].vlines(librosa.frames_to_time(onset_bt_rms), 0, self.oenv.max(), label="Backtracked (RMS)", color="r")
+        ax[3].vlines(librosa.frames_to_time(onset_bt_rms), 0, self.oenv.max(), label='Backtracked (RMS)', color='r')
         ax[3].legend()
         fig.savefig("./onset.png", dpi=500)
 
@@ -199,15 +192,15 @@ class BC(object):
         dis_all_b2a = 0
         for b_each in b:
             l2_min = min(abs(a_each - b_each) for a_each in a)
-            dis_all_b2a += math.exp(-(l2_min**2) / (2 * sigma**2))
+            dis_all_b2a += math.exp(-(l2_min ** 2) / (2 * sigma ** 2))
         return dis_all_b2a / len(b)
 
     @staticmethod
     def fix_directed_GAHR(a, b, sigma):
         a = BC.motion_frames2time(a, 0, 30)
         b = BC.motion_frames2time(b, 0, 30)
-        a = [0] + a + [len(a) / 30]
-        b = [0] + b + [len(b) / 30]
+        a = [0] + a + [len(a)/30]
+        b = [0] + b + [len(b)/30]
         return BC.GAHR(a, b, sigma)
 
     def calculate_align(self, onset_bt_rms, beat_vel, pose_fps=30):
@@ -222,15 +215,14 @@ class BC(object):
             avg_dis_all_b2a_list.append(self.GAHR(pose_bt, onset_bt_rms, self.sigma))
         self.counter += 1
         self.sum += sum(avg_dis_all_b2a_list) / len(self.upper_body)
-
+    
     def avg(self):
-        return self.sum / self.counter
-
+        return self.sum/self.counter
+    
     def reset(self):
         self.counter = 0
         self.sum = 0
-
-
+    
 class Arg(object):
     def __init__(self):
         self.vae_length = 240
@@ -241,7 +233,6 @@ class Arg(object):
         self.vae_grow = [1, 1, 2, 1]
         self.variational = False
 
-
 class FGD(object):
     def __init__(self, download_path="./emage/"):
         if download_path is not None:
@@ -251,25 +242,19 @@ class FGD(object):
             smplx_model_file_path = os.path.join(smplx_model_dir, "SMPLX_NEUTRAL_2020.npz")
             if not os.path.exists(model_file_path):
                 print(f"Downloading {model_file_path}")
-                wget.download(
-                    "https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/AESKConv_240_100.bin",
-                    model_file_path,
-                )
+                wget.download("https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/test_sequences/weights/AESKConv_240_100.bin", model_file_path)
 
             os.makedirs(smplx_model_dir, exist_ok=True)
             if not os.path.exists(smplx_model_file_path):
                 print(f"Downloading {smplx_model_file_path}")
-                wget.download(
-                    "https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/smplx_models/smplx/SMPLX_NEUTRAL_2020.npz",
-                    smplx_model_file_path,
-                )
+                wget.download("https://huggingface.co/spaces/H-Liu1997/EMAGE/resolve/main/EMAGE/smplx_models/smplx/SMPLX_NEUTRAL_2020.npz", smplx_model_file_path)
         args = Arg()
         self.eval_model = VAESKConv(args)  # Assumes LocalEncoder is defined elsewhere
-        old_stat = torch.load(download_path + "AESKConv_240_100.bin")["model_state"]
+        old_stat = torch.load(download_path+"AESKConv_240_100.bin")["model_state"]
         new_stat = {}
         for k, v in old_stat.items():
             # If 'module.' is in the key, remove it
-            new_key = k.replace("module.", "") if "module." in k else k
+            new_key = k.replace('module.', '') if 'module.' in k else k
             new_stat[new_key] = v
         self.eval_model.load_state_dict(new_stat)
 
@@ -301,7 +286,7 @@ class FGD(object):
         return self.frechet_distance(pred_features, target_features)
 
     def reset(self):
-        """Reset the accumulated feature lists."""
+        """ Reset the accumulated feature lists. """
         self.pred_features = []
         self.target_features = []
 
@@ -334,7 +319,7 @@ class FGD(object):
         try:
             frechet_dist = FGD.calculate_frechet_distance(A_mu, A_sigma, B_mu, B_sigma)
         except ValueError:
-            frechet_dist = 1e10
+            frechet_dist = 1e+10
         return frechet_dist
 
     @staticmethod
@@ -353,8 +338,8 @@ class FGD(object):
         sigma1 = np.atleast_2d(sigma1)
         sigma2 = np.atleast_2d(sigma2)
 
-        assert mu1.shape == mu2.shape, "Training and test mean vectors have different lengths"
-        assert sigma1.shape == sigma2.shape, "Training and test covariances have different dimensions"
+        assert mu1.shape == mu2.shape, 'Training and test mean vectors have different lengths'
+        assert sigma1.shape == sigma2.shape, 'Training and test covariances have different dimensions'
 
         diff = mu1 - mu2
 
@@ -371,9 +356,10 @@ class FGD(object):
         if np.iscomplexobj(covmean):
             if not np.allclose(np.diagonal(covmean).imag, 0, atol=1e-3):
                 m = np.max(np.abs(covmean.imag))
-                raise ValueError(f"Imaginary component {m}")
+                raise ValueError(f'Imaginary component {m}')
             covmean = covmean.real
 
         tr_covmean = np.trace(covmean)
 
-        return diff.dot(diff) + np.trace(sigma1) + np.trace(sigma2) - 2 * tr_covmean
+        return (diff.dot(diff) + np.trace(sigma1) +
+                np.trace(sigma2) - 2 * tr_covmean)
