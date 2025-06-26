@@ -37,6 +37,11 @@ datasets/cached_ckpts/
 datasets/cached_graph/
 emage/smplx_models/
 frame-interpolation-pytorch/*.pt
+emage/
+datasets/cached_audio/
+.DS_Store
+.vscode/
+.gradio/
 
 # submodules
 Wav2Lip/
