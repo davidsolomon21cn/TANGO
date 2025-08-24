@@ -63,7 +63,7 @@ git clone https://github.com/CyberAgentAILab/TANGO.git
 cd TANGO
 ```
 
-## Build Environtment
+## Build Environment
 
 For inference and training CLIP part, we recommend a python version `==3.10.16` and cuda version `==11.8`. Now HuggingFace Space version is py310 version:
 
@@ -80,7 +80,7 @@ python -m pip install -r ./requirements.txt
 
 ## Inference
 
-Here is the command for running inference scripts under the path `<your root>/TANGO/`, it will take around 3 min to generate two 8s vidoes. You can visualize by directly check the video or check the result .npz files via blender using our blender addon in [EMAGE](https://github.com/PantoMatrix/PantoMatrix).
+Here is the command for running inference scripts under the path `<your root>/TANGO/`, it will take around 3 min to generate two 8s videos. You can visualize by directly check the video or check the result .npz files via blender using our blender addon in [EMAGE](https://github.com/PantoMatrix/PantoMatrix).
 
 _Necessary checkpoints and pre-computed graphs will be automatically downloaded during the first run. Please ensure that at least 10GB of disk space is available._
 
@@ -120,8 +120,8 @@ python create_graph.py
 
 # Copyright Information
 
-We thanks the open-source project [Wav2Lip](https://github.com/Rudrabha/Wav2Lip), [FiLM](https://github.com/caffeinism/FiLM-pytorch), [SMPLerX](https://github.com/caizhongang/SMPLer-X).
+We thank the open-source project [Wav2Lip](https://github.com/Rudrabha/Wav2Lip), [FiLM](https://github.com/caffeinism/FiLM-pytorch), [SMPLerX](https://github.com/caizhongang/SMPLer-X).
 
 Check out our previous works for Co-Speech 3D motion Generation <a href="https://github.com/PantoMatrix/PantoMatrix">DisCo, BEAT, EMAGE</a>.
 
-This project is only for research or education purposes, and not freely available for commercial use or redistribution. The srcipt is available only under the terms of the [Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/legalcode) (CC BY-NC 4.0) license.
+This project is only for research or education purposes, and not freely available for commercial use or redistribution. The script is available only under the terms of the [Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/legalcode) (CC BY-NC 4.0) license.
